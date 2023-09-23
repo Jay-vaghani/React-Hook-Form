@@ -3,7 +3,25 @@ import React from "react";
 import { useForm } from "react-hook-form";
 
 function Form1() {
-  const form = useForm();
+    const form = useForm({
+      defaultValues: {
+        username: "admin",
+        email: "admin@gmail.com",
+        chanel: "user",
+      },
+    });
+
+//   const form = useForm({
+//     defaultValues: async () => {
+//       const res = await fetch("https://jsonplaceholder.typicode.com/users/3");
+//       const data = await res.json();
+//       return {
+//         username: data.username,
+//         email: data.email,
+//         chanel: data.website,
+//       };
+//     },
+//   });
 
   const { register, control, handleSubmit, formState } = form;
 
@@ -12,8 +30,6 @@ function Form1() {
   };
 
   const { errors } = formState;
-
-  console.log(errors);
 
   return (
     <div>
