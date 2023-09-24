@@ -1,6 +1,6 @@
 import { DevTool } from "@hookform/devtools";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 
 function Form1() {
   //   const form = useForm({
@@ -32,17 +32,27 @@ function Form1() {
           city: data.address.city,
           zipcode: data.address.zipcode,
         },
+        phNumbers: [
+          {
+            number: "",
+          },
+        ],
       };
     },
   });
 
   const { register, control, handleSubmit, formState } = form;
+  const { errors } = formState;
+  console.log(errors);
+
+  const { fields, append, remove } = useFieldArray({
+    name: "phNumbers",
+    control: control,
+  });
 
   const onSubmit = (data) => {
     console.log(data);
   };
-
-  const { errors } = formState;
 
   return (
     <div>
@@ -124,6 +134,44 @@ function Form1() {
 
         <label htmlFor="secondary">Secondary Number</label>
         <input type="text" id="secondary" {...register("number.1")} />
+
+        <div>
+          <label>List of phone numbers</label>
+          <div>
+            {fields.map((fields, index) => {
+              return (
+                <div key={fields.id}>
+                  <input
+                    type="text"
+                    {...register(`phNumbers.${index}.number`, {
+                      required: {
+                        value: true,
+                        message: "Please enter the phone number",
+                      },
+                      minLength: {
+                        value: 10,
+                        message: "number is invalid",
+                      },
+                      maxLength: {
+                        value: 10,
+                        message: "number is invalid",
+                      },
+                    })}
+                  />
+                  {index > 0 ? (
+                    <button onClick={() => remove(index)}>Remove</button>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              );
+            })}
+
+            <button type="button" onClick={() => append({ number: "" })}>
+              Add phone number
+            </button>
+          </div>
+        </div>
 
         <button>Submit</button>
       </form>
