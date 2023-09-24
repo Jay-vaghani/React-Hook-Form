@@ -3,25 +3,38 @@ import React from "react";
 import { useForm } from "react-hook-form";
 
 function Form1() {
-    const form = useForm({
-      defaultValues: {
-        username: "admin",
-        email: "admin@gmail.com",
-        chanel: "user",
-      },
-    });
+  //   const form = useForm({
+  //     defaultValues: {
+  //       username: "admin",
+  //       email: "admin@gmail.com",
+  //       chanel: "user",
+  //       address: {
+  //         street: "",
+  //         suite: "",
+  //         city: "",
+  //         zipcode: "",
+  //       },
+  //     },
+  //   });
 
-//   const form = useForm({
-//     defaultValues: async () => {
-//       const res = await fetch("https://jsonplaceholder.typicode.com/users/3");
-//       const data = await res.json();
-//       return {
-//         username: data.username,
-//         email: data.email,
-//         chanel: data.website,
-//       };
-//     },
-//   });
+  const form = useForm({
+    defaultValues: async () => {
+      const res = await fetch("https://jsonplaceholder.typicode.com/users/3");
+      const data = await res.json();
+      return {
+        username: data.username,
+        email: data.email,
+        chanel: data.website,
+        number: ["9033611999", "9376979721"],
+        address: {
+          street: data.address.street,
+          suite: data.address.suite,
+          city: data.address.city,
+          zipcode: data.address.zipcode,
+        },
+      };
+    },
+  });
 
   const { register, control, handleSubmit, formState } = form;
 
@@ -93,6 +106,24 @@ function Form1() {
           })}
         />
         <p className="error">{errors.chanel?.message}</p>
+
+        <label htmlFor="city">City</label>
+        <input type="text" id="city" {...register("address.city")} />
+
+        <label htmlFor="street">Street</label>
+        <input type="text" id="street" {...register("address.street")} />
+
+        <label htmlFor="suite">Suite</label>
+        <input type="text" id="suite" {...register("address.suite")} />
+
+        <label htmlFor="zipcode">Zipcode</label>
+        <input type="text" id="zipcode" {...register("address.zipcode")} />
+
+        <label htmlFor="primary">Primary Number</label>
+        <input type="text" id="primary" {...register("number.0")} />
+
+        <label htmlFor="secondary">Secondary Number</label>
+        <input type="text" id="secondary" {...register("number.1")} />
 
         <button>Submit</button>
       </form>
